@@ -2,9 +2,6 @@ package com.example.bitter.repository;
 
 import com.example.bitter.model.Department;
 import com.example.bitter.model.Employee;
-import jakarta.transaction.Transactional;
-import org.assertj.core.data.MapEntry;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DataJpaTest
 
@@ -28,7 +22,6 @@ class EmployeeRepositoryTest {
 
 
     @Test
-
     void InitialTest(){
 
         populate();
@@ -49,18 +42,22 @@ class EmployeeRepositoryTest {
         entityManager.persist(software);
         entityManager.persist(hardware);
         entityManager.persist(accounting);
+        entityManager.flush();
+        entityManager.getEntityManager().getTransaction().commit();
+        entityManager.getEntityManager().getTransaction().begin();
         Employee employee1 = Employee.builder().id(1009).name("Marcus").build();
         employee1.setDepartment(software);
-        entityManager.persist(employee1);
+        entityManager.merge(employee1);
         Employee employee2 = Employee.builder().id(2008).name("Tina").build();
         employee2.setDepartment(software);
-        entityManager.persist(employee2);
+        entityManager.merge(employee2);
         Employee employee3 = Employee.builder().id(2765).name("Paulin").build();
         employee3.setDepartment(hardware);
-        entityManager.persist(employee3);
+        entityManager.merge(employee3);
         Employee employee4 = Employee.builder().id(2719).name("Andrea").build();
         employee4.setDepartment(accounting);
-        entityManager.persist(employee4);
+        entityManager.merge(employee4);
         entityManager.flush();
+        entityManager.getEntityManager().getTransaction().commit();
     }
 }
