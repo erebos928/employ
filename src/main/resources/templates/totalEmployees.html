@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/js/bootstrap.bundle.min.css"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div class="container-lg">
+  <table class="table">
+    <thead>
+    <th>Department</th><th>Employee</th>
+    </thead>
+    <tbody>
+    <th:block th:each="entry: ${resultMap}">
+      <tr>
+        <td th:each="department: ${entry.key}" th:text="${department.title}" th:rowspan="${entry.value.size}" class="align-middle"></td>
+        <td th:with="employee=${entry.value.get(0)}" th:text="${employee.name}"></td>
+      </tr>
+      <tr th:each="employee, iStat: ${entry.value}" th:if="${iStat.count > 1}"><td th:text="${employee.name}"></td></tr>
+    </th:block>
+    </tbody>
+  </table>
+</div>
+<button class="btn btn-success"><a href="add">Add Employee</a></button>
+</body>
+</html>
